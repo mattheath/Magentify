@@ -4,7 +4,7 @@ require File.expand_path('../lib/magentify/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Alistair Stead"]
   gem.email         = ["alistair.stead@designdisclosure.com"]
-  gem.description   = %q{TODO: Write a gem description}
+  gem.description   = %q{An extension to Capistrano to deploy Magento. Adding the specific requirements and additional tasks.}
   gem.summary       = %q{Deploying Magento PHP applications with Capistrano.}
   gem.homepage      = ""
 
