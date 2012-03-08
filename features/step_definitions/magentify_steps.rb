@@ -4,8 +4,8 @@ When /^I execute magentify \.$/ do
   end
 end
 
-Then /^deploy\.rb should load mage\.rb$/ do
-  pending # express the regexp above with the code you wish you had
+Then /^Capfile should load mage\.rb$/ do
+  File.open(File.join(@app_dir, "Capfile"), 'rb').read().match('mage\.rb').should be_true
 end
 
 When /^I execute cap \-T$/ do
@@ -14,6 +14,9 @@ When /^I execute cap \-T$/ do
   end
 end
 
-Then /^cap \-T should list mage$/ do
-  pending # express the regexp above with the code you wish you had
+Then /^mage tasks should be listed$/ do
+  Dir.chdir(@app_dir) do
+    result = %x[cap -T]
+    result.match('Clear the Magento Cache').should be_true
+  end
 end

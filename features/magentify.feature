@@ -6,9 +6,9 @@ Feature: Magentify
   Scenario: User runs $ magentify .
     Given an app
     When I execute magentify .
-    Then deploy.rb should load mage.rb
+    Then Capfile should load mage.rb
 
   Scenario: User runs $ cap -T
     Given an app
     When I execute cap -T
-    Then cap -T should list mage
+    Then mage tasks should be listed

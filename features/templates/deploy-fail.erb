@@ -1,0 +1,18 @@
+set :application, "magento"
+set :domain,      "#{application}.com"
+set :deploy_to,   "<%= deploy_variables[:deploy_to] %>"
+
+set :user,        "<%= deploy_variables[:logged_in_user] %>"
+set :repository,  "file://<%= deploy_variables[:repository] %>"
+set :scm,         :git
+# Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, `subversion` or `none`
+set :scm_command, "<%= deploy_variables[:git_executable] %>"
+
+role :web,        "localhost"                         # Your HTTP server, Apache/etc
+role :app,        "localhost"                         # This may be the same as your `Web` server
+role :db,         "localhost", :primary => true       # This is where Rails migrations will run
+
+set  :keep_releases,  3
+
+# Turn of use of sudo as your local machine does not need it.
+set :use_sudo, false
