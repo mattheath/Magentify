@@ -1,7 +1,15 @@
 load Gem.find_files('nonrails.rb').last.to_s
-set :app_symlinks, ["/media", "/var", "/sitemaps", "/staging"]
-set :app_shared_dirs, ["/app/etc", "/sitemaps", "/media", "/var", "/staging"]
-set :app_shared_files, ["/app/etc/local.xml"]
+
+# =========================================================================
+# These variables MUST be set in the client capfiles. If they are not set,
+# the deploy will fail with an error.
+# =========================================================================
+
+_cset(:app_symlinks) { 
+  abort "[error] Please specify an array of symlinks to shared resources, set :app_symlinks, ['/media', .. '/staging']"
+}
+_cset(:app_shared_dirs)  { abort "[error] Please specify, set :app_shared_dirs" }
+_cset(:app_shared_files)  { abort "[error] Please specify, set :app_shared_files" }
 
 namespace :mage do
   desc <<-DESC
@@ -18,10 +26,10 @@ namespace :mage do
   DESC
   task :setup, :roles => :web, :except => { :no_release => true } do
     if app_shared_dirs
-      app_shared_dirs.each { |link| run "#{try_sudo} mkdir -p #{shared_path}#{link} && chmod 777 #{shared_path}#{link}"}
+      app_shared_dirs.each { |link| run "#{try_sudo} mkdir -p #{shared_path}#{link} && chmod g+w #{shared_path}#{link}"}
     end
     if app_shared_files
-      app_shared_files.each { |link| run "#{try_sudo} touch #{shared_path}#{link} && chmod 777 #{shared_path}#{link}" }
+      app_shared_files.each { |link| run "#{try_sudo} touch #{shared_path}#{link} && chmod g+w #{shared_path}#{link}" }
     end
   end
 

@@ -22,21 +22,21 @@ namespace :deploy do
     This method should be overridden to meet the requirements of your allocation.
   DESC
   task :finalize_update, :except => { :no_release => true } do
-    #
+    # do nothing for non rails apps
   end
 
   desc <<-DESC
     [Overload] Default actions cancelled
   DESC
   task :restart, :roles => :app, :except => { :no_release => true } do
-    #
+    # do nothing for non rails apps
   end
 
   desc <<-DESC
     [Overload] Default actions cancelled.
   DESC
   task :migrate, :roles => :db, :only => { :primary => true } do
-    #
+    # do nothing for non rails apps
   end
 
   desc <<-DESC
@@ -44,7 +44,7 @@ namespace :deploy do
   DESC
   task :migrations do
     set :migrate_target, :latest
-    #
+    # // do nothing for non rails apps
   end
 
   desc <<-DESC
@@ -52,20 +52,6 @@ namespace :deploy do
   DESC
   task :cold do
     update
-  end
-
-  desc <<-DESC
-    [Overload] Default actions cancelled.
-  DESC
-  task :start, :roles => :app do
-    #
-  end
-
-  desc <<-DESC
-    [Overload] Default actions cancelled.
-  DESC
-  task :stop, :roles => :app do
-    #
   end
 
   namespace :web do
