@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["alistair.stead@designdisclosure.com"]
   gem.description   = %q{An extension to Capistrano to deploy Magento. Adding the specific requirements and additional tasks.}
   gem.summary       = %q{Deploying Magento PHP applications with Capistrano.}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/alistairstead/Magentify"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
