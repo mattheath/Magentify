@@ -21,7 +21,7 @@ OptionParser.new do |opts|
 end
 
 if ARGV.empty?
-  abort "Please specify the directory to capifony, e.g. `#{File.basename($0)} .'"
+  abort "Please specify the directory to magentify, e.g. `#{File.basename($0)} .'"
 elsif !File.exists?(ARGV.first)
   abort "`#{ARGV.first}' does not exist."
 elsif !File.directory?(ARGV.first)
