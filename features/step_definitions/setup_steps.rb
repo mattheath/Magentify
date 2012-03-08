@@ -1,6 +1,6 @@
 When /^I execute deploy:setup$/ do
   Dir.chdir(@app_dir) do
-    system "cap deploy:setup > /dev/null"
+    system "cap deploy:setup > /dev/null 2>&1"
   end
 end
 
