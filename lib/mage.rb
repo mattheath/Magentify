@@ -1,3 +1,4 @@
+load Gem.find_files('nonrails.rb').last.to_s
 set :app_symlinks, ["/media", "/var", "/sitemaps", "/staging"]
 set :app_shared_dirs, ["/app/etc", "/sitemaps", "/media", "/var", "/staging"]
 set :app_shared_files, ["/app/etc/local.xml"]
