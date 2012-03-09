@@ -4,12 +4,13 @@ load Gem.find_files('nonrails.rb').last.to_s
 # These variables MUST be set in the client capfiles. If they are not set,
 # the deploy will fail with an error.
 # =========================================================================
-
 _cset(:app_symlinks) { 
-  abort "[error] Please specify an array of symlinks to shared resources, set :app_symlinks, ['/media', .. '/staging']"
+  abort "Please specify an array of symlinks to shared resources, set :app_symlinks, ['/media', ./. '/staging']"
 }
-_cset(:app_shared_dirs)  { abort "[error] Please specify, set :app_shared_dirs" }
-_cset(:app_shared_files)  { abort "[error] Please specify, set :app_shared_files" }
+_cset(:app_shared_dirs)  { abort "Please specify, set :app_shared_dirs" }
+_cset(:app_shared_files)  { abort "Please specify, set :app_shared_files" }
+
+_cset :compile, false
 
 namespace :mage do
   desc <<-DESC
@@ -24,7 +25,7 @@ namespace :mage do
     It is safe to run this task on servers that have already been set up; it \
     will not destroy any deployed revisions or data.
   DESC
-  task :setup, :roles => :web, :except => { :no_release => true } do
+  task :setup, :roles => [:web, :app], :except => { :no_release => true } do
     if app_shared_dirs
       app_shared_dirs.each { |link| run "#{try_sudo} mkdir -p #{shared_path}#{link} && chmod g+w #{shared_path}#{link}"}
     end
@@ -40,7 +41,7 @@ namespace :mage do
     Any directories deployed from the SCM are first removed and then replaced with \
     symlinks to the same directories within the shared location.
   DESC
-  task :finalize_update, :roles => :web, :except => { :no_release => true } do    
+  task :finalize_update, :roles => [:web, :app], :except => { :no_release => true } do    
     run "chmod -R g+w #{latest_release}" if fetch(:group_writable, true)
 
     if app_symlinks
@@ -56,14 +57,15 @@ namespace :mage do
       # Add symlinks the directoris in the shared location
       app_shared_files.each { |link| run "ln -s #{shared_path}#{link} #{latest_release}#{link}" }
     end
-    # TODO should add configoration for this happening post deployment.
-    compiler
+    if :compile
+      compiler
+    end
   end
 
   desc <<-DESC
     Clear the Magento Cache
   DESC
-  task :cc, :roles => :web do
+  task :cc, :roles => [:web, :app] do
     run "cd #{current_path} && rm -rf var/cache/*"
   end
 
@@ -84,35 +86,35 @@ namespace :mage do
   desc <<-DESC
     Run the Magento compiler
   DESC
-  task :compiler, :roles => :web do
+  task :compiler, :roles => [:web, :app] do
     run "cd #{current_path}/shell && php -f compiler.php -- compile"
   end
 
   desc <<-DESC
     Enable the Magento compiler
   DESC
-  task :enable_compiler, :roles => :web do
+  task :enable_compiler, :roles => [:web, :app] do
     run "cd #{current_path}/shell && php -f compiler.php -- enable"
   end
 
   desc <<-DESC
     Disable the Magento compiler
   DESC
-  task :disable_compiler, :roles => :web do
+  task :disable_compiler, :roles => [:web, :app] do
     run "cd #{current_path}/shell && php -f compiler.php -- disable"
   end
 
   desc <<-DESC
     Run the Magento indexer
   DESC
-  task :indexer, :roles => :app do
+  task :indexer, :roles => [:web, :app] do
     run "cd #{current_path}/shell && php -f indexer.php -- reindexall"
   end
 
   desc <<-DESC
     Clean the Magento logs
   DESC
-  task :clean_logs, :roles => :web do
+  task :clean_logs, :roles => [:web, :app] do
     run "cd #{current_path}/shell && php -f log.php -- clean"
   end
 end
