@@ -1,5 +1,5 @@
 When /^I execute deploy$/ do
-  Dir.chdir(@app_dir) do
+  Dir.chdir(@src_dir) do
     system "cap deploy:setup > /dev/null 2>&1"
     system "cap deploy > /dev/null 2>&1"
   end
@@ -21,14 +21,34 @@ When /^I have deploy\.rb with missing config$/ do
   template_path     = File.expand_path(File.join(__FILE__, "..", "..", "templates", "deploy-fail.erb"))
   compiled_template = ERB.new(File.read(template_path)).result(binding)
 
-  File.open(File.join(@app_dir, "config", "deploy.rb"), 'w') {|f| 
+  File.open(File.join(@src_dir, "config", "deploy.rb"), 'w') {|f| 
     f.write compiled_template
   }
+  Dir.chdir(@src_dir) do
+    @out = %x[cap deploy 2>&1]
+  end
 end
 
 Then /^\[error\] should be returned$/ do
-  Dir.chdir(@app_dir) do
-    result = %x[cap -T]
-    result.match('error').should be_true
+  @out.match('Please').should be_true
+end
+
+When /^I execute mage:disable$/ do
+  Dir.chdir(@src_dir) do
+    @out = %x[cap mage:disable 2>&1]
   end
+end
+
+Then /^the maintenance\.flag file should be written to current$/ do
+  File.exists?(File.join(@test_files_dir, "deployed", "current", "maintenance.flag")).should be_true
+end
+
+When /^I execute mage:enable$/ do
+  Dir.chdir(@src_dir) do
+    @out = %x[cap mage:enable 2>&1]
+  end
+end
+
+Then /^the maintenance\.flag file should be removed from current$/ do
+  File.exists?(File.join(@test_files_dir, "deployed", "current", "maintenance.flag")).should be_false
 end

@@ -12,3 +12,15 @@ Feature: Deployment
     Given an app
     When I have deploy.rb with missing config
     Then [error] should be returned
+
+  Scenario: User runs $ cap mage:disable
+    Given an app
+    When I execute deploy
+    And I execute mage:disable
+    Then the maintenance.flag file should be written to current
+
+  Scenario: User runs $ cap mage:enable
+    Given an app
+    When I execute deploy
+    And I execute mage:enable
+    Then the maintenance.flag file should be removed from current

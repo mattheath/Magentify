@@ -6,11 +6,15 @@ Given /^an app$/ do
   end
 
   # Create and capify the dummy app, and push it to the local repo
-  FileUtils.mkdir_p @app_dir
-  Dir.chdir(@app_dir) do
+  FileUtils.mkdir_p @src_dir
+  Dir.chdir(@src_dir) do
     [
       %Q{git init > /dev/null 2>&1} ,
-      %Q{mkdir config > /dev/null 2>&1},
+      %Q{mkdir -p app/etc media var shell staging sitemaps > /dev/null 2>&1},
+      %Q{touch  shell/compiler.php > /dev/null 2>&1},
+      %Q{touch  shell/index.php > /dev/null 2>&1},
+      %Q{touch  shell/log.php > /dev/null 2>&1},
+      %Q{touch  app/etc/local.xml > /dev/null 2>&1},
       %Q{magentify . > /dev/null 2>&1},
       %Q{git add . > /dev/null 2>&1},
       %Q{git commit -m "first commit" > /dev/null 2>&1},
@@ -32,7 +36,7 @@ Given /^an app$/ do
   template_path     = File.expand_path(File.join(__FILE__, "..", "..", "templates", "deploy.erb"))
   compiled_template = ERB.new(File.read(template_path)).result(binding)
 
-  File.open(File.join(@app_dir, "config", "deploy.rb"), 'w') {|f| 
+  File.open(File.join(@src_dir, "config", "deploy.rb"), 'w') {|f| 
     f.write compiled_template
   }
 end
