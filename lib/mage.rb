@@ -57,9 +57,6 @@ namespace :mage do
       # Add symlinks the directoris in the shared location
       app_shared_files.each { |link| run "ln -s #{shared_path}#{link} #{latest_release}#{link}" }
     end
-    if :compile
-      compiler
-    end
   end
 
   desc <<-DESC
@@ -87,7 +84,9 @@ namespace :mage do
     Run the Magento compiler
   DESC
   task :compiler, :roles => [:web, :app] do
-    run "cd #{current_path}/shell && php -f compiler.php -- compile"
+    if fetch(:compile, true)
+      run "cd #{current_path}/shell && php -f compiler.php -- compile"
+    end
   end
 
   desc <<-DESC
@@ -114,10 +113,11 @@ namespace :mage do
   desc <<-DESC
     Clean the Magento logs
   DESC
-  task :clean_logs, :roles => [:web, :app] do
+  task :clean_log, :roles => [:web, :app] do
     run "cd #{current_path}/shell && php -f log.php -- clean"
   end
 end
 
 after   'deploy:setup', 'mage:setup'
 after   'deploy:finalize_update', 'mage:finalize_update'
+after   'deploy:create_symlink', 'mage:compiler'
