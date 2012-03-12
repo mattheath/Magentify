@@ -4,11 +4,15 @@ load Gem.find_files('nonrails.rb').last.to_s
 # These variables MUST be set in the client capfiles. If they are not set,
 # the deploy will fail with an error.
 # =========================================================================
-_cset(:app_symlinks) { 
+_cset(:app_symlinks) {
   abort "Please specify an array of symlinks to shared resources, set :app_symlinks, ['/media', ./. '/staging']"
 }
-_cset(:app_shared_dirs)  { abort "Please specify, set :app_shared_dirs" }
-_cset(:app_shared_files)  { abort "Please specify, set :app_shared_files" }
+_cset(:app_shared_dirs)  {
+  abort "Please specify an array of shared directories to be created, set :app_shared_dirs"
+}
+_cset(:app_shared_files)  {
+  abort "Please specify an array of shared files to be symlinked, set :app_shared_files"
+}
 
 _cset :compile, false
 
