@@ -48,7 +48,7 @@ For detailed information about how to configure and use Capistrano for deploymen
 
 ## Contributing
 
-1. Fork it
+1. [Fork it](https://github.com/alistairstead/Magentify/fork_select)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Create a cucumber scenario to describe your feature
 4. Add the steps to test the functionality
