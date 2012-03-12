@@ -14,7 +14,7 @@
 
 Once you have run `magentify` on your project it will add a Capfile and deploy.rb configuration file
 
-``` ruby config/deploy.rb
+```ruby
 set :application, "magento"
 set :domain,      "#{application}.com"
 set :deploy_to,   "/var/www/#{domain}"
