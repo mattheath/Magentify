@@ -10,7 +10,6 @@ set :scm_command, "<%= deploy_variables[:git_executable] %>"
 
 role :web,        "localhost"                         # Your HTTP server, Apache/etc
 role :app,        "localhost"                         # This may be the same as your `Web` server
-role :db,         "localhost", :primary => true       # This is where Rails migrations will run
 
 set  :keep_releases,  3
 
